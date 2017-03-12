@@ -4,6 +4,7 @@ package com.michal.springboot.service;
 import com.michal.springboot.domain.User;
 import com.michal.springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -24,25 +25,33 @@ public class CrudUserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
         return users;
     }
 
-    public User getUser(long id){
+    public User getUser(long id) {
         return userRepository.findOne(id);
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         userRepository.save(user);
     }
 
-    public void deleteUser(long id){
+    public void deleteUser(long id) {
         userRepository.delete(id);
     }
 
-    public void updateUser(User user){
-       userRepository.save(user);
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
+    public List<User> getPages(int x, int y) {
+
+        List<User> users = new ArrayList<>();
+        userRepository.findAll(new PageRequest(x, y)).forEach(users::add);
+
+        return users;
     }
 }

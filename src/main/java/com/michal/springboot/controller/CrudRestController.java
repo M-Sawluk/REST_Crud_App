@@ -17,11 +17,14 @@ import java.util.List;
 @RestController
 public class CrudRestController {
 
-    @Autowired
     private CrudUserService crudUserService;
 
-    @Autowired
     private CrudAddressService crudAddressService;
+
+    public CrudRestController(CrudUserService crudUserService, CrudAddressService crudAddressService) {
+        this.crudUserService = crudUserService;
+        this.crudAddressService = crudAddressService;
+    }
 
     @RequestMapping("/getUsers")
     public List<User> getUserList(){

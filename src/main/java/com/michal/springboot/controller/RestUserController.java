@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class RestUserController {
 
-    UserInMemoryRepositoryImpl iMR = new UserInMemoryRepositoryImpl();
+    private UserInMemoryRepositoryImpl iMR = new UserInMemoryRepositoryImpl();
 
     @RequestMapping("/users")
     public List<User> getAllUsers(){
