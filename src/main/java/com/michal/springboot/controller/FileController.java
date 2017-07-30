@@ -3,14 +3,19 @@ package com.michal.springboot.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.michal.springboot.domain.File;
 import com.michal.springboot.repository.FileRepo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by Mike on 2017-07-24.
@@ -18,22 +23,28 @@ import java.io.IOException;
 @RestController
 public class FileController {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private FileRepo fileRepo;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void upload(@RequestParam("file") MultipartFile file, @RequestPart("a") String json) throws IOException {
-
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void upload(@RequestParam("file") MultipartFile file, @RequestParam("a") String json) throws IOException {
         File f =new ObjectMapper().readValue(json , File.class);
-        logger.error("{}", f);
-        File filee = new File();
-        filee.setId(1L);
+        f.setFile(file.getBytes());
+        fileRepo.save(f);
+    }
 
-        filee.setFile(file.getBytes());
+    @RequestMapping(value = "/showPdf/{id}" , produces = "application/pdf", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> downloadPDFFile(@PathVariable Long id)
+            throws IOException {
 
-        fileRepo.save(filee);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(fileRepo.findOne(id).getFile());
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(new InputStreamResource(byteArrayInputStream));
     }
 
 

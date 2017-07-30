@@ -1,9 +1,6 @@
 package com.michal.springboot.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -13,8 +10,8 @@ import java.util.Arrays;
 public class File {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Lob
     private byte[] file;
@@ -49,6 +46,7 @@ public class File {
     public String toString() {
         return "File{" +
                 "id=" + id +
+                ", file=" + Arrays.toString(file) +
                 ", name='" + name + '\'' +
                 '}';
     }
