@@ -52,11 +52,23 @@ public class FileController {
                 .body(new InputStreamResource(byteArrayInputStream));
     }
 
-    @RequestMapping(value = "/uploadBase" , method = RequestMethod.POST)
+    @RequestMapping(value = "upload/pdf/uploadBase" , method = RequestMethod.POST)
     public void up(@RequestBody File file){
         logger.info("{}",file);
         fileRepo.save(file);
     }
 
+    @RequestMapping(value = "upload/pdf/postmanUpload" , method = RequestMethod.POST)
+    public void upPostman(@RequestBody File file){
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (String s : file.getLines()) {
+            stringBuilder.append(s);
+        }
+        file.setFile(stringBuilder.toString());
+        logger.info("{}",file);
+        fileRepo.save(file);
+    }
 
 }
