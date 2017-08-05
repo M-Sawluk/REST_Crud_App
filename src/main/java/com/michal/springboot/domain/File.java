@@ -14,7 +14,7 @@ public class File {
     private long id;
 
     @Lob
-    private byte[] file;
+    private String file;
 
     private String name;
 
@@ -26,11 +26,11 @@ public class File {
         this.id = id;
     }
 
-    public byte[] getFile() {
+    public String getFile() {
         return file;
     }
 
-    public void setFile(byte[] file) {
+    public void setFile(String file) {
         this.file = file;
     }
 
@@ -46,7 +46,7 @@ public class File {
     public String toString() {
         return "File{" +
                 "id=" + id +
-                ", file=" + Arrays.toString(file) +
+                ", file='" + file + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

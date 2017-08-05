@@ -23,22 +23,54 @@
     </div>
 </body>
 <script>
+//    $("#send").click(function () {
+//        var formData = new FormData();
+//        var json = JSON.stringify({name: document.getElementById("name").value});
+//        console.log(json);
+//        formData.append('file',  document.getElementById("bytes").files[0]);
+//        formData.append("a", JSON.stringify({name: document.getElementById("name").value}));
+//        console.log("ajax")
+//        $.ajax({
+//            url: 'http://localhost:8080/upload',
+//            type: 'POST',
+//            data: formData,
+//            processData: false,
+//            contentType: false,
+//            success: function(data){alert(data);},
+//            failure: function() {alert("failed");}
+//        });
+//
+//    });
+
     $("#send").click(function () {
-        var formData = new FormData();
-        var json = JSON.stringify({name: document.getElementById("name").value});
-        console.log(json);
-        formData.append('file',  document.getElementById("bytes").files[0]);
-        formData.append("a", JSON.stringify({name: document.getElementById("name").value}));
-        console.log("ajax")
-        $.ajax({
-            url: 'http://localhost:8080/upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(data){alert(data);},
-            failure: function() {alert("failed");}
-        });
+        var reader = new FileReader();
+        var file = document.getElementById("bytes").files[0];
+
+        reader.readAsDataURL(file);
+
+        reader.onload = function () {
+            var data = reader.result;
+            var base64 = data.replace(/^[^,]*,/, '');
+
+            var json = {
+                name: document.getElementById("name").value,
+                file: base64
+            };
+
+            console.log(json);
+
+            $.ajax({
+                url: 'http://localhost:8080/uploadBase',
+                type: 'POST',
+                data: JSON.stringify(json),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(data){alert(data);},
+                failure: function() {alert("failed");}
+            });
+        };
+
+
 
     });
 </script>
